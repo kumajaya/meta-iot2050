@@ -31,6 +31,15 @@ jobs:
           name: iot2050-example-image-rt
           path: build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img*
 
+  ubuntu-example-image:
+    name: Ubuntu example image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Ubuntu example image
+        run: ./kas-docker build kas-iot2050-example.yml:kas/opt/ubuntu.yml
+
   bootloaders:
     name: Bootloaders
     runs-on: ubuntu-latest
