@@ -85,11 +85,16 @@ IOT2050_DEBIAN_ALSA_PACKAGES = " \
     alsa-utils \
     alsa-tools \
     "
+# coral support
+IOT2050_DEBIAN_CORAL_PACKAGES = " \
+    libedgetpu1-std python3-pycoral \
+    "
 IMAGE_PREINSTALL += " \
     ${IOT2050_DEBIAN_DEBUG_PACKAGES} \
     ${IOT2050_DEBIAN_WIFI_PACKAGES} \
     ${IOT2050_DEBIAN_BT_PACKAGES} \
     ${IOT2050_DEBIAN_ALSA_PACKAGES} \
+    ${IOT2050_DEBIAN_CORAL_PACKAGES} \
     "
 
 IMAGE_INSTALL += " \
@@ -112,4 +117,7 @@ IMAGE_INSTALL += " \
     mindconnect-node-red-contrib-mindconnect \
     node-red-node-serialport \
     node-red-node-sqlite \
+    gasket-${KERNEL_NAME} \
     "
+
+GROUPS += "apex"

@@ -25,7 +25,8 @@ SRC_URI = " \
     file://10-globally-managed-devices.conf \
     file://cellular-4g \
     file://eth0-default \
-    file://20-swap-ethernet-port.rules"
+    file://20-swap-ethernet-port.rules \
+    file://65-apex.rules"
 
 do_install() {
     # add board status led service
@@ -54,4 +55,6 @@ do_install() {
     install -v -d  ${D}/etc/udev/rules.d/
     install -v -m 644 ${WORKDIR}/20-swap-ethernet-port.rules ${D}/etc/udev/rules.d/
 
+    # set group of gasket/apex device
+    install -v -m 644 ${WORKDIR}/65-apex.rules ${D}/etc/udev/rules.d/
 }
