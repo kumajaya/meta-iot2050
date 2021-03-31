@@ -1,7 +1,7 @@
-From 2527d0ee3b12d136d4753e2d4323126d20e1fd19 Mon Sep 17 00:00:00 2001
+From 3c3e03e0835881ef9b3feb6b6d35b57e77f125f4 Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Mon, 11 May 2020 20:10:16 +0200
-Subject: [PATCH 02/50] board: siemens: Add support for SIMATIC IOT2050 devices
+Subject: [PATCH 2/7] board: siemens: Add support for SIMATIC IOT2050 devices
 
 This adds support for the IOT2050 Basic and Advanced devices. The Basic
 used the dual-core AM6528 GP processor, the Advanced one the AM6548 HS
@@ -25,25 +25,27 @@ Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
  board/siemens/iot2050/README      |  65 +++++++++
  board/siemens/iot2050/board.c     | 229 ++++++++++++++++++++++++++++++
  board/siemens/iot2050/config.mk   |   8 ++
- configs/iot2050_defconfig         | 136 ++++++++++++++++++
- include/configs/iot2050.h         |  60 ++++++++
- 9 files changed, 545 insertions(+)
+ board/siemens/iot2050/u-boot.its  |  58 ++++++++
+ configs/iot2050_defconfig         | 137 ++++++++++++++++++
+ include/configs/iot2050.h         |  59 ++++++++
+ 10 files changed, 603 insertions(+)
  create mode 100644 board/siemens/iot2050/Kconfig
  create mode 100644 board/siemens/iot2050/MAINTAINERS
  create mode 100644 board/siemens/iot2050/Makefile
  create mode 100644 board/siemens/iot2050/README
  create mode 100644 board/siemens/iot2050/board.c
  create mode 100644 board/siemens/iot2050/config.mk
+ create mode 100644 board/siemens/iot2050/u-boot.its
  create mode 100644 configs/iot2050_defconfig
  create mode 100644 include/configs/iot2050.h
 
 diff --git a/arch/arm/mach-k3/Kconfig b/arch/arm/mach-k3/Kconfig
-index c7d186149b..b191e88b13 100644
+index d4285687ae..ef83cc1cb7 100644
 --- a/arch/arm/mach-k3/Kconfig
 +++ b/arch/arm/mach-k3/Kconfig
-@@ -143,4 +143,5 @@ config SYS_K3_SPL_ATF
- 
+@@ -150,4 +150,5 @@ config SYS_K3_SPL_ATF
  source "board/ti/am65x/Kconfig"
+ source "board/ti/am64x/Kconfig"
  source "board/ti/j721e/Kconfig"
 +source "board/siemens/iot2050/Kconfig"
  endif
@@ -431,12 +433,76 @@ index 0000000000..951f72ba16
 +#   Jan Kiszka <jan.kiszka@siemens.com>
 +
 +flash.bin: all
+diff --git a/board/siemens/iot2050/u-boot.its b/board/siemens/iot2050/u-boot.its
+new file mode 100644
+index 0000000000..1bc89c0f99
+--- /dev/null
++++ b/board/siemens/iot2050/u-boot.its
+@@ -0,0 +1,58 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) Siemens AG, 2020
++ *
++ * Authors:
++ *   Jan Kiszka <jan.kiszka@siemens.com>
++ */
++/dts-v1/;
++
++/ {
++	description = "U-Boot for IOT2050";
++	#address-cells = <0x1>;
++
++	images {
++		u-boot {
++			description = "U-Boot";
++			type = "standalone";
++			arch = "arm64";
++			os = "u-boot";
++			compression = "none";
++			load = <0x80800000>;
++			entry = <0x80800000>;
++			data = /incbin/("u-boot-nodtb.bin");
++		};
++
++		fdt-iot2050-basic {
++			description = "iot2050-basic.dtb";
++			type = "flat_dt";
++			arch = "arm64";
++			compression = "none";
++			data = /incbin/("arch/arm/dts/iot2050-basic.dtb");
++		};
++
++		fdt-iot2050-advanced {
++			description = "iot2050-advanced.dtb";
++			type = "flat_dt";
++			arch = "arm64";
++			compression = "none";
++			data = /incbin/("arch/arm/dts/iot2050-advanced.dtb");
++		};
++	};
++
++	configurations {
++		default = "conf-iot2050-basic";
++	
++		conf-iot2050-basic {
++			description = "iot2050-basic";
++			firmware = "u-boot";
++			fdt = "fdt-iot2050-basic";
++		};
++
++		conf-iot2050-advanced {
++			description = "iot2050-advanced";
++			firmware = "u-boot";
++			fdt = "fdt-iot2050-advanced";
++		};
++	};
++};
 diff --git a/configs/iot2050_defconfig b/configs/iot2050_defconfig
 new file mode 100644
-index 0000000000..6c5e5e80de
+index 0000000000..5bc4cfca6c
 --- /dev/null
 +++ b/configs/iot2050_defconfig
-@@ -0,0 +1,136 @@
+@@ -0,0 +1,137 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_K3=y
 +CONFIG_SPL_GPIO_SUPPORT=y
@@ -495,10 +561,10 @@ index 0000000000..6c5e5e80de
 +# CONFIG_ISO_PARTITION is not set
 +CONFIG_OF_CONTROL=y
 +CONFIG_SPL_OF_CONTROL=y
-+CONFIG_DEFAULT_DEVICE_TREE="iot2050-basic"
-+CONFIG_OF_LIST="iot2050-basic iot2050-advanced"
++CONFIG_DEFAULT_DEVICE_TREE="k3-am6528-iot2050-basic"
++CONFIG_OF_LIST="k3-am6528-iot2050-basic k3-am6548-iot2050-advanced"
 +CONFIG_SPL_MULTI_DTB_FIT=y
-+CONFIG_SPL_OF_LIST="iot2050-spl"
++CONFIG_SPL_OF_LIST="k3-am65-iot2050-spl"
 +CONFIG_SPL_MULTI_DTB_FIT_NO_COMPRESSION=y
 +CONFIG_ENV_IS_IN_SPI_FLASH=y
 +CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
@@ -558,6 +624,7 @@ index 0000000000..6c5e5e80de
 +CONFIG_RESET_TI_SCI=y
 +CONFIG_DM_SERIAL=y
 +CONFIG_SOC_TI=y
++CONFIG_SOC_DEVICE_TI_K3=y
 +CONFIG_SPI=y
 +CONFIG_DM_SPI=y
 +CONFIG_CADENCE_QSPI=y
@@ -575,10 +642,10 @@ index 0000000000..6c5e5e80de
 +CONFIG_OF_LIBFDT_OVERLAY=y
 diff --git a/include/configs/iot2050.h b/include/configs/iot2050.h
 new file mode 100644
-index 0000000000..2d1b1b1150
+index 0000000000..71d8ccd565
 --- /dev/null
 +++ b/include/configs/iot2050.h
-@@ -0,0 +1,60 @@
+@@ -0,0 +1,59 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
 + * Configuration header file for IOT2050
@@ -633,12 +700,11 @@ index 0000000000..2d1b1b1150
 +#endif
 +
 +#define CONFIG_EXTRA_ENV_SETTINGS					\
-+	BOOTENV								\
 +	EXTRA_ENV_IOT2050_BOARD_SETTINGS
 +
 +#include <configs/ti_armv7_common.h>
 +
 +#endif /* __CONFIG_IOT2050_H */
 -- 
-2.17.1
+2.31.1
 

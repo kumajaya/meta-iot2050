@@ -1,0 +1,67 @@
+From e81a0512997c4154541a1e3feea7dad8be919ceb Mon Sep 17 00:00:00 2001
+From: Chao Zeng <chao.zeng@siemens.com>
+Date: Thu, 25 Mar 2021 14:52:55 +0800
+Subject: [PATCH 4/7] dts:remove the extra sdhci1 dts node
+
+as the sdhci1 has already been set at the k3-am65-main.dtsi,
+remove the redundant configuration
+
+Signed-off-by: Chao Zeng <chao.zeng@siemens.com>
+---
+ arch/arm/dts/k3-am65-iot2050-common.dtsi | 33 +++++-------------------
+ 1 file changed, 7 insertions(+), 26 deletions(-)
+
+diff --git a/arch/arm/dts/k3-am65-iot2050-common.dtsi b/arch/arm/dts/k3-am65-iot2050-common.dtsi
+index 890868de6d..6868d7dca3 100644
+--- a/arch/arm/dts/k3-am65-iot2050-common.dtsi
++++ b/arch/arm/dts/k3-am65-iot2050-common.dtsi
+@@ -152,32 +152,6 @@
+ &cbass_main {
+ 	u-boot,dm-spl;
+ 
+-	sdhci1: sdhci@04FA0000 {
+-		compatible = "ti,am654-sdhci-5.1";
+-		reg = <0x0 0x4FA0000 0x0 0x1000>,
+-		      <0x0 0x4FB0000 0x0 0x400>;
+-		power-domains = <&k3_pds 48 TI_SCI_PD_EXCLUSIVE>;
+-		clocks = <&k3_clks 48 0>, <&k3_clks 48 1>;
+-		clock-names = "clk_ahb", "clk_xin";
+-		max-frequency = <25000000>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&main_mmc1_pins_default>;
+-		sdhci-caps-mask = <0x7 0x200000>;
+-		ti,otap-del-sel-legacy = <0x0>;
+-		ti,otap-del-sel-mmc-hs = <0x0>;
+-		ti,otap-del-sel-sd-hs = <0x0>;
+-		ti,otap-del-sel-sdr12 = <0x0>;
+-		ti,otap-del-sel-sdr25 = <0x0>;
+-		ti,otap-del-sel-sdr50 = <0x8>;
+-		ti,otap-del-sel-sdr104 = <0x7>;
+-		ti,otap-del-sel-ddr50 = <0x4>;
+-		ti,otap-del-sel-ddr52 = <0x4>;
+-		ti,otap-del-sel-hs200 = <0x7>;
+-		ti,trm-icp = <0x8>;
+-		ti,driver-strength-ohm = <50>;
+-		status = "okay";
+-	};
+-
+ 	icssg0_mdio_pins_default: icssg0_mdio_pins_default {
+ 		pinctrl-single,pins = <
+ 			AM65X_IOPAD(0x0294, PIN_INPUT, 0) /* (AE26) PRG0_MDIO0_MDIO */
+@@ -219,6 +193,13 @@
+ 	};
+ };
+ 
++&sdhci1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mmc1_pins_default>;
++	ti,driver-strength-ohm = <50>;
++	disable-wp;
++};
++
+ &icssg0_mdio {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+-- 
+2.31.1
+

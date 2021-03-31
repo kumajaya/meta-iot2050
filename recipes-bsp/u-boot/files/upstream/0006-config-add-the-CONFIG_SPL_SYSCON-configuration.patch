@@ -1,0 +1,23 @@
+From 794004a224c047d366694a981888d5287262ab34 Mon Sep 17 00:00:00 2001
+From: Chao Zeng <chao.zeng@siemens.com>
+Date: Thu, 25 Mar 2021 15:42:03 +0800
+Subject: [PATCH 6/7] config: add the CONFIG_SPL_SYSCON configuration
+
+Signed-off-by: Chao Zeng <chao.zeng@siemens.com>
+---
+ configs/iot2050_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configs/iot2050_defconfig b/configs/iot2050_defconfig
+index 804d833ff2..d3296476bb 100644
+--- a/configs/iot2050_defconfig
++++ b/configs/iot2050_defconfig
+@@ -139,3 +139,5 @@ CONFIG_PHY_TI=y
+ CONFIG_TI_AM64_ICSSG_PRUETH=y
+ CONFIG_REMOTEPROC_TI_PRU=y
+ CONFIG_TI_PRUSS=y
++CONFIG_SPL_SYSCON=y
++
+-- 
+2.31.1
+
