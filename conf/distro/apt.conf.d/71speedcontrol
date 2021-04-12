@@ -1,0 +1,4 @@
+Acquire::Check-Valid-Until "false";
+Acquire::http::Dl-Limit "300";
+Acquire::https::Dl-Limit "300";
+Acquire::Retries "5";

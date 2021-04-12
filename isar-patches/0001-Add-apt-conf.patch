@@ -1,0 +1,89 @@
+From b22eb2b7af80af351dfe919d3c0cb625f13a60e7 Mon Sep 17 00:00:00 2001
+From: Su Bao Cheng <baocheng.su@siemens.com>
+Date: Fri, 9 Apr 2021 14:03:25 +0800
+Subject: [PATCH] Add apt-conf
+
+Signed-off-by: Su Bao Cheng <baocheng.su@siemens.com>
+---
+ meta/recipes-core/isar-bootstrap/isar-bootstrap-host.bb  | 9 +++++++++
+ .../recipes-core/isar-bootstrap/isar-bootstrap-target.bb | 8 ++++++++
+ meta/recipes-core/isar-bootstrap/isar-bootstrap.inc      | 3 +++
+ 3 files changed, 20 insertions(+)
+
+diff --git a/meta/recipes-core/isar-bootstrap/isar-bootstrap-host.bb b/meta/recipes-core/isar-bootstrap/isar-bootstrap-host.bb
+index c985383..22af88f 100644
+--- a/meta/recipes-core/isar-bootstrap/isar-bootstrap-host.bb
++++ b/meta/recipes-core/isar-bootstrap/isar-bootstrap-host.bb
+@@ -18,6 +18,8 @@ do_apt_config_prepare[dirs] = "${WORKDIR}"
+ do_apt_config_prepare[vardeps] += "\
+                                    APTPREFS \
+                                    HOST_DISTRO_APT_PREFERENCES \
++                                   APTCONFS \
++                                   HOST_DISTRO_APT_CONFS \
+                                    DEBDISTRONAME \
+                                    APTSRCS \
+                                    HOST_DISTRO_APT_SOURCES \
+@@ -30,6 +32,13 @@ python do_apt_config_prepare() {
+     ).split()
+     aggregate_files(d, apt_preferences_list, apt_preferences_out)
+ 
++    apt_confs_out = d.getVar("APTCONFS", True)
++    apt_confs_list = (
++        d.getVar("HOST_DISTRO_APT_CONFS", True) or ""
++    ).split()
++    aggregate_files(d, apt_confs_list, apt_confs_out)
++
++
+     apt_sources_out = d.getVar("APTSRCS", True)
+     apt_sources_init_out = d.getVar("APTSRCS_INIT", True)
+     apt_sources_list = (
+diff --git a/meta/recipes-core/isar-bootstrap/isar-bootstrap-target.bb b/meta/recipes-core/isar-bootstrap/isar-bootstrap-target.bb
+index 80e7f40..3e06d16 100644
+--- a/meta/recipes-core/isar-bootstrap/isar-bootstrap-target.bb
++++ b/meta/recipes-core/isar-bootstrap/isar-bootstrap-target.bb
+@@ -15,6 +15,8 @@ do_apt_config_prepare[dirs] = "${WORKDIR}"
+ do_apt_config_prepare[vardeps] += "\
+                                    APTPREFS \
+                                    DISTRO_APT_PREFERENCES \
++                                   APTCONFS \
++                                   DISTRO_APT_CONFS \
+                                    DEBDISTRONAME \
+                                    APTSRCS \
+                                    DISTRO_APT_SOURCES \
+@@ -27,6 +29,12 @@ python do_apt_config_prepare() {
+     ).split()
+     aggregate_files(d, apt_preferences_list, apt_preferences_out)
+ 
++    apt_confs_out = d.getVar("APTCONFS", True)
++    apt_confs_list = (
++        d.getVar("DISTRO_APT_CONFS", True) or ""
++    ).split()
++    aggregate_files(d, apt_confs_list, apt_confs_out)
++
+     apt_sources_out = d.getVar("APTSRCS", True)
+     apt_sources_init_out = d.getVar("APTSRCS_INIT", True)
+     apt_sources_list = (d.getVar("DISTRO_APT_SOURCES", True) or "").split()
+diff --git a/meta/recipes-core/isar-bootstrap/isar-bootstrap.inc b/meta/recipes-core/isar-bootstrap/isar-bootstrap.inc
+index 8f5f727..19a16a0 100644
+--- a/meta/recipes-core/isar-bootstrap/isar-bootstrap.inc
++++ b/meta/recipes-core/isar-bootstrap/isar-bootstrap.inc
+@@ -18,6 +18,7 @@ PV = "1.0"
+ DEBOOTSTRAP ?= "qemu-debootstrap"
+ ROOTFSDIR = "${WORKDIR}/rootfs"
+ APTPREFS = "${WORKDIR}/apt-preferences"
++APTCONFS = "${WORKDIR}/apt-confs"
+ APTSRCS = "${WORKDIR}/apt-sources"
+ APTSRCS_INIT = "${WORKDIR}/apt-sources-init"
+ DISTRO_BOOTSTRAP_KEYFILES = ""
+@@ -309,6 +310,8 @@ isar_bootstrap() {
+             mkdir -p "${ROOTFSDIR}/etc/apt/apt.conf.d"
+             install -v -m644 "${WORKDIR}/isar-apt.conf" \
+                              "${ROOTFSDIR}/etc/apt/apt.conf.d/50isar.conf"
++            install -v -m644 "${APTCONFS}" \
++                             "${ROOTFSDIR}/etc/apt/apt.conf.d/bootstrap"
+             find ${APT_KEYS_DIR}/ -type f | while read keyfile
+             do
+                 kfn="$(basename $keyfile)"
+-- 
+2.25.1
+
