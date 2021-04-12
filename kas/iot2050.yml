@@ -30,6 +30,9 @@ repos:
     refspec: f5a6fdfd9aad49202093aab2158f625429eaf7c5
     layers:
       meta:
+    patches:
+      snapshot-limit:
+        path: isar-patches/0001-Add-apt-conf.patch
 
 bblayers_conf_header:
   standard: |
