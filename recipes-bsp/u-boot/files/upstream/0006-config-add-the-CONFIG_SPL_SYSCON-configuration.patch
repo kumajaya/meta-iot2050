@@ -1,7 +1,7 @@
-From 794004a224c047d366694a981888d5287262ab34 Mon Sep 17 00:00:00 2001
+From 00a11ae5846cd5bb08657c0dff6a7063f2e1b83d Mon Sep 17 00:00:00 2001
 From: Chao Zeng <chao.zeng@siemens.com>
 Date: Thu, 25 Mar 2021 15:42:03 +0800
-Subject: [PATCH 6/7] config: add the CONFIG_SPL_SYSCON configuration
+Subject: [PATCH 6/9] config: add the CONFIG_SPL_SYSCON configuration
 
 Signed-off-by: Chao Zeng <chao.zeng@siemens.com>
 ---
@@ -19,5 +19,5 @@ index 804d833ff2..d3296476bb 100644
 +CONFIG_SPL_SYSCON=y
 +
 -- 
-2.31.1
+2.17.1
 

@@ -1,7 +1,7 @@
-From 7067ed3c9626a722db9a3b2073ed919fe4fb7a1e Mon Sep 17 00:00:00 2001
+From 90705c911920f11b4b6ab16e6ab48df074937bc7 Mon Sep 17 00:00:00 2001
 From: Chao Zeng <chao.zeng@siemens.com>
 Date: Thu, 25 Mar 2021 15:35:57 +0800
-Subject: [PATCH 5/7] Add the function,convert string to upper
+Subject: [PATCH 5/9] Add the function,convert string to upper
 
 convert the string to upper
 
@@ -45,5 +45,5 @@ index 55ff9f7437..c00bb5895d 100644
 +		*out = '\0';
 +}
 -- 
-2.31.1
+2.17.1
 

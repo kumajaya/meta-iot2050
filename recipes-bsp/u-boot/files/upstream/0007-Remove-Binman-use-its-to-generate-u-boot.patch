@@ -1,7 +1,7 @@
-From 44d763d9000735a092eea7dee386b09ab32b7102 Mon Sep 17 00:00:00 2001
+From f887baaeab239c7a143306d4e1b081d7dbf9b86a Mon Sep 17 00:00:00 2001
 From: Chao Zeng <chao.zeng@siemens.com>
 Date: Wed, 31 Mar 2021 14:40:23 +0800
-Subject: [PATCH 7/7] Remove Binman,use its to generate u-boot
+Subject: [PATCH 7/9] Remove Binman,use its to generate u-boot
 
 as TI SDK has not well support binman,so fallbak to use its to generate u-boot
 
@@ -283,5 +283,5 @@ index d3296476bb..bb999d9a60 100644
 +CONFIG_IMAGE_FORMAT_LEGACY=y
 \ No newline at end of file
 -- 
-2.31.1
+2.17.1
 

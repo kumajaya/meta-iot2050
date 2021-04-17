@@ -1,0 +1,27 @@
+From 84976567197433414190a926ada5617d827f2d83 Mon Sep 17 00:00:00 2001
+From: chao zeng <chao.zeng@siemens.com>
+Date: Sat, 17 Apr 2021 09:55:48 +0800
+Subject: [PATCH 12/12] add cbass main
+
+Signed-off-by: chao zeng <chao.zeng@siemens.com>
+---
+ arch/arm/dts/k3-am65-iot2050-common.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/dts/k3-am65-iot2050-common.dtsi b/arch/arm/dts/k3-am65-iot2050-common.dtsi
+index 5091d72b6f..9e2edd8cb2 100644
+--- a/arch/arm/dts/k3-am65-iot2050-common.dtsi
++++ b/arch/arm/dts/k3-am65-iot2050-common.dtsi
+@@ -141,6 +141,9 @@
+ // 	};
+ };
+ 
++&cbass_main {
++	u-boot,dm-spl;
++};
+ // &cbass_main {
+ // 	u-boot,dm-spl;
+ 
+-- 
+2.17.1
+

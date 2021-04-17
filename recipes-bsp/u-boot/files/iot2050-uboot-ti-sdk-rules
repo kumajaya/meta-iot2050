@@ -23,12 +23,12 @@ KEY=$(WORKDIR)/keys/custMpk.pem
 TEMPLATE=$(WORKDIR)/keys/x509-sysfw-template.txt
 
 ifeq ($(IOT2050_VARIANT), advanced)
-    UBOOT_CONFIG_A53=am65x_iot2050_advanced_a53_defconfig
-    SEBOOT_IMG=$(PREBUILD_DIR)/tiboot3_advanced.bin
-    SOC_SECURITY = SE
+    UBOOT_CONFIG_A53=am65x_iot2050_defconfig
+    SEBOOT_IMG=$(PREBUILD_DIR)/tiboot3.bin
+    SOC_SECURITY = NONE
 else
-    UBOOT_CONFIG_A53=am65x_iot2050_basic_a53_defconfig
-    SEBOOT_IMG=$(PREBUILD_DIR)/tiboot3_basic.bin
+    UBOOT_CONFIG_A53=am65x_iot2050_defconfig
+    SEBOOT_IMG=$(PREBUILD_DIR)/tiboot3.bin
     SOC_SECURITY = NONE
 endif
 
@@ -37,8 +37,8 @@ ifeq ($(SOC_SECURITY), SE)
     UBOOT_SYSFW=$(PREBUILD_DIR)/sysfw.itb_HS
     UBOOT_A53_SPL_IMAGE=tispl.bin_HS
     UBOOT_A53_IMAGE=u-boot.img_HS
-    UBOOT_ATF=$(WORKDIR)/bl31.bin_HS
-    UBOOT_TEE=$(WORKDIR)/bl32.bin_HS
+    # UBOOT_ATF=$(WORKDIR)/bl31.bin_HS
+    # UBOOT_TEE=$(WORKDIR)/bl32.bin_HS
 else
     PARALLEL_BUILD=-j $(shell echo $$(($$(nproc) * 2)))
     UBOOT_SYSFW=$(PREBUILD_DIR)/sysfw.itb

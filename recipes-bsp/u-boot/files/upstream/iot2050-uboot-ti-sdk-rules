@@ -24,11 +24,11 @@ TEMPLATE=$(WORKDIR)/keys/x509-sysfw-template.txt
 
 ifeq ($(IOT2050_VARIANT), advanced)
     UBOOT_CONFIG_A53=iot2050_defconfig
-    SEBOOT_IMG=$(PREBUILD_DIR)/sysfw_sr2/tiboot3_advanced.bin
+    SEBOOT_IMG=$(PREBUILD_DIR)/sysfw_sr2/tiboot3.bin
     SOC_SECURITY = NONE
 else
     UBOOT_CONFIG_A53=iot2050_defconfig
-    SEBOOT_IMG=$(PREBUILD_DIR)/sysfw_sr2/tiboot3_basic.bin
+    SEBOOT_IMG=$(PREBUILD_DIR)/sysfw_sr2/tiboot3.bin
     SOC_SECURITY = NONE
 endif
 
@@ -83,6 +83,7 @@ override_dh_auto_build:
 	dd if=/dev/zero ibs=1k count=128 of=$(SPI_FLASH_IMG) seek=6784K oflag=seek_bytes conv=notrunc
 	# SysFW
 	dd if=$(UBOOT_SYSFW) of=$(SPI_FLASH_IMG) seek=6912K oflag=seek_bytes conv=notrunc
+	dd if=$(UBOOT_SYSFW) of=$(SPI_FLASH_IMG) seek=7424K oflag=seek_bytes conv=notrunc
 	# PRU ethernet FW
 	dd if=$(PREBUILD_DIR)/prufw_sr2/am65x-pru0-prueth-fw.elf of=$(SPI_FLASH_IMG) seek=7936K oflag=seek_bytes conv=notrunc
 	dd if=$(PREBUILD_DIR)/prufw_sr2/am65x-pru1-prueth-fw.elf of=$(SPI_FLASH_IMG) seek=8000K oflag=seek_bytes conv=notrunc

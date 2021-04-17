@@ -1,7 +1,7 @@
-From 3c3e03e0835881ef9b3feb6b6d35b57e77f125f4 Mon Sep 17 00:00:00 2001
+From 02f374ba405704c5656c62e5efe6f5e11b8b22c6 Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Mon, 11 May 2020 20:10:16 +0200
-Subject: [PATCH 2/7] board: siemens: Add support for SIMATIC IOT2050 devices
+Subject: [PATCH 2/9] board: siemens: Add support for SIMATIC IOT2050 devices
 
 This adds support for the IOT2050 Basic and Advanced devices. The Basic
 used the dual-core AM6528 GP processor, the Advanced one the AM6548 HS
@@ -40,12 +40,12 @@ Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
  create mode 100644 include/configs/iot2050.h
 
 diff --git a/arch/arm/mach-k3/Kconfig b/arch/arm/mach-k3/Kconfig
-index d4285687ae..ef83cc1cb7 100644
+index c7d186149b..b191e88b13 100644
 --- a/arch/arm/mach-k3/Kconfig
 +++ b/arch/arm/mach-k3/Kconfig
-@@ -150,4 +150,5 @@ config SYS_K3_SPL_ATF
+@@ -143,4 +143,5 @@ config SYS_K3_SPL_ATF
+ 
  source "board/ti/am65x/Kconfig"
- source "board/ti/am64x/Kconfig"
  source "board/ti/j721e/Kconfig"
 +source "board/siemens/iot2050/Kconfig"
  endif
@@ -706,5 +706,5 @@ index 0000000000..71d8ccd565
 +
 +#endif /* __CONFIG_IOT2050_H */
 -- 
-2.31.1
+2.17.1
 

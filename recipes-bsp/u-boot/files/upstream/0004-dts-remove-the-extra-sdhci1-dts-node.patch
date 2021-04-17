@@ -1,7 +1,7 @@
-From e81a0512997c4154541a1e3feea7dad8be919ceb Mon Sep 17 00:00:00 2001
+From 9639d6248ded5df741799c200d6028f8b0d02950 Mon Sep 17 00:00:00 2001
 From: Chao Zeng <chao.zeng@siemens.com>
 Date: Thu, 25 Mar 2021 14:52:55 +0800
-Subject: [PATCH 4/7] dts:remove the extra sdhci1 dts node
+Subject: [PATCH 4/9] dts:remove the extra sdhci1 dts node
 
 as the sdhci1 has already been set at the k3-am65-main.dtsi,
 remove the redundant configuration
@@ -63,5 +63,5 @@ index 890868de6d..6868d7dca3 100644
  	status = "okay";
  	pinctrl-names = "default";
 -- 
-2.31.1
+2.17.1
 

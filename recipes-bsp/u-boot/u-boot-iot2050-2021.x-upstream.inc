@@ -20,10 +20,13 @@ SRC_URI += " \
     file://upstream/0005-Add-the-function-convert-string-to-upper.patch \
     file://upstream/0006-config-add-the-CONFIG_SPL_SYSCON-configuration.patch \
     file://upstream/0007-Remove-Binman-use-its-to-generate-u-boot.patch \
+    file://upstream/0008-icssg-remove.patch \
+    file://upstream/0009-remove-some-unused-node.patch \
+    file://upstream/0010-add-the-leds-node.patch  \
     file://upstream/iot2050-uboot-ti-sdk-rules \
     "
 
-U_BOOT_REV = "654d73f8725db340ccb470d5d130df3fcf7ce482"
+U_BOOT_REV = "3c9ebdb87d65aacc4ec302be8bef3df15364bacd"
 U_BOOT_CONFIG = "iot2050_defconfig"
 U_BOOT_BIN = "flash.bin"
 #SRC_URI[sha256sum] = "e8fd05d77ef93ee47aa413b225123e56153144dac7b14b6fa9452899906e62da"
@@ -34,7 +37,7 @@ SPI_FLASH_DEPLOY_IMG = "iot2050-image-boot.bin"
 
 DEPENDS += "trusted-firmware-a-iot2050 optee-os-iot2050"
 DEBIAN_BUILD_DEPENDS =. "trusted-firmware-a-iot2050, optee-os-iot2050, \
-    swig:native, python3-dev:native, python3-pkg-resources,"
+    swig:native, python3-dev:native, python3-pkg-resources, python-dev:native,"
 
 #do_prepare_build_append() {
 #    cd ${S}
