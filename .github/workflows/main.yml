@@ -3,42 +3,33 @@ name: CI
 on: [push]
 
 jobs:
-  debian-example-image:
-    name: Debian example image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build image
-        run: ./kas-container build kas-iot2050-example.yml
-      - name: Upload image
-        uses: actions/upload-artifact@v2
-        with:
-          name: iot2050-example-image
-          path: build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img*
-
-  debian-rt-example-image:
-    name: Debian RT example image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build image
-        run: ./kas-container build kas-iot2050-example.yml:kas/opt/preempt-rt.yml
-      - name: Upload image
-        uses: actions/upload-artifact@v2
-        with:
-          name: iot2050-example-image-rt
-          path: build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img*
-
   ubuntu-example-image:
     name: Ubuntu example image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Ubuntu example image
-        run: ./kas-docker build kas-iot2050-example.yml:kas/opt/ubuntu.yml
+      - name: Build image
+        run: ./kas-container build kas-iot2050-example.yml:kas/opt/ubuntu.yml
+      - name: Upload image
+        uses: actions/upload-artifact@v2
+        with:
+          name: iot2050-ubuntu-example-image
+          path: build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-ubuntu-iot2050.wic.img*
+
+  ubuntu-rt-example-image:
+    name: Ubuntu RT example image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build image
+        run: ./kas-container build kas-iot2050-example.yml:kas/opt/ubuntu.yml:kas/opt/preempt-rt.yml
+      - name: Upload image
+        uses: actions/upload-artifact@v2
+        with:
+          name: iot2050-ubuntu-example-image-rt
+          path: build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-ubuntu-iot2050.wic.img*
 
   bootloaders:
     name: Bootloaders
