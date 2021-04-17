@@ -116,6 +116,7 @@ IMAGE_INSTALL_append_iot2050-debian = " \
     node-red \
     node-red-gpio \
     node-red-preinstalled-nodes \
+    trueport-${KERNEL_NAME} \
     "
 
 IOT2050_CORAL_SUPPORT ?= "1"
