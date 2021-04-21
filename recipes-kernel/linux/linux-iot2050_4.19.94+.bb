@@ -35,5 +35,3 @@ KERNEL_DEFCONFIG = "iot2050_defconfig_base"
 KERNEL_DEFCONFIG_EXTRA = "iot2050_defconfig_extra.cfg"
 
 S = "${WORKDIR}/ti-linux-kernel-${KERNEL_REV}"
-
-ISAR_CROSS_COMPILE = "0"

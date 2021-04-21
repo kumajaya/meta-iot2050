@@ -118,5 +118,4 @@ IMAGE_INSTALL += " \
     node-red-node-serialport \
     node-red-node-sqlite \
     trueport-${KERNEL_NAME} \
-    linux-headers-${KERNEL_NAME} \
     "
