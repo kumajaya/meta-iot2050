@@ -60,6 +60,10 @@ IOT2050_DEBIAN_DEBUG_PACKAGES = " \
     net-tools \
     i2c-tools \
     sudo \
+    bmap-tools \
+    gdisk \
+    rsync \
+    unzip \
     "
 
 # wifi support
