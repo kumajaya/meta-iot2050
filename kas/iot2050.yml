@@ -32,8 +32,9 @@ repos:
       meta:
     patches:
       rootfs-u-boot-fix:
-        repo: meta-iot2050
         path: isar-patches/0001-wic-plugins-Improve-rootfs-u-boot-script_prepend-pas.patch
+      ubuntu-fix:
+        path: isar-patches/0001-u-boot-script-Account-for-deficit-in-Ubuntu-s-linux-.patch
 
 bblayers_conf_header:
   standard: |
