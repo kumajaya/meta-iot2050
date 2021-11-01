@@ -1,0 +1,32 @@
+From 5059f1d8d0ad594d27f2436a896636243f86994c Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Fri, 27 Aug 2021 07:14:07 +0200
+Subject: [PATCH] u-boot-script: Account for deficit in Ubuntu's linux-base
+
+Account for https://bugs.launchpad.net/ubuntu/+source/linux-base/+bug/1941793
+by open-coding 'linux-version list', only keeping 'linux-version sort'.
+This fixes u-boot-script for arm64 on all recent Ubuntu releases. Needed
+since d6954739fe43.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ meta/recipes-bsp/u-boot-script/files/update-u-boot-script | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/meta/recipes-bsp/u-boot-script/files/update-u-boot-script b/meta/recipes-bsp/u-boot-script/files/update-u-boot-script
+index 40d3108..eb2c295 100755
+--- a/meta/recipes-bsp/u-boot-script/files/update-u-boot-script
++++ b/meta/recipes-bsp/u-boot-script/files/update-u-boot-script
+@@ -15,7 +15,8 @@ fi
+ 
+ BOOT_CMD=$(mktemp)
+ 
+-KERNEL_VERSION=$(linux-version list | linux-version sort --reverse | head -1)
++KERNEL_VERSION=$(find /boot -name vmlinu[xz]-* | sed 's|/boot/vmlinu[xz]-||g' |
++		 linux-version sort --reverse | head -1)
+ 
+ case $(uname -m) in
+ 	aarch64|mips|riscv64)
+-- 
+2.31.1
+
