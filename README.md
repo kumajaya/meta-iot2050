@@ -13,25 +13,13 @@ For example under Debian Linux
 sudo apt install docker.io
 ```
 
-Then build the example image
+Then open the menu to select the desired image and options:
 
 ```shell
-./kas-container build kas-iot2050-example.yml
+./kas-container menu
 ```
 
-Build the example RT image, for example
-
-```shell
-./kas-container build kas-iot2050-example.yml:kas/opt/preempt-rt.yml
-```
-
-Using 3rd-party mirrors, for example
-
-```shell
-./kas-container build kas-iot2050-example.yml:kas/opt/mirror-example.yml
-```
-
-After build complete, the final image is under
+After the build completed, the final image is under
 
 ```text
 build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic.img
@@ -45,8 +33,9 @@ build/tmp/deploy/images/iot2050/iot2050-image-example-iot2050-debian-iot2050.wic
 ```shell
 ./kas-container build kas-iot2050-example.yml:kas/opt/sdk.yml
 ```
+(or select SDK in `kas menu`)
 
-After build complete, the SDK tarball is located at
+After the build completed, the SDK tarball is located at
 
 ```text
 build/tmp/deploy/images/iot2050/sdk-isar-arm64.tar.xz
@@ -64,24 +53,6 @@ docker load -i build/tmp/deploy/images/iot2050/sdk-iot2050-debian-arm64-docker-a
 
 ```shell
 ./kas-container --isar clean
-```
-
-## Build released version
-
-First checkout the desired tag. Then build the image or sdk by appending the `kas/opt/package-lock.yml`:
-
-```shell
-# example image
-./kas-container build kas-iot2050-example.yml:kas/opt/package-lock.yml
-
-# example rt image
-./kas-container build kas-iot2050-example.yml:kas/opt/preempt-rt.yml:kas/opt/package-lock.yml
-
-# bootloader
-./kas-container build kas-iot2050-boot.yml:kas/opt/package-lock.yml
-
-# SDK
-./kas-container build kas-iot2050-example.yml:kas/opt/sdk.yml:kas/opt/package-lock.yml
 ```
 
 ## Booting the image from SD card
@@ -145,3 +116,74 @@ device.
 
 NOTE: This selection is not persistent. The boot loader will fall back to its
 default boot order after reset.
+
+## Building with SWUpdate support
+
+It is possible to create an image with a SWUpdate based
+[double copy root file system](https://sbabic.github.io/swupdate/overview.html#double-copy-with-fall-back) for Over-The-Air updates by selecting the option `Example image with SWUpdate support` during the image configuration with `./kas-container menu`. You can also build the image by calling:
+
+```shell
+./kas-container build kas-iot2050-example.yml:kas/opt/swupdate-example.yml
+```
+
+You can find the final image under `build/tmp/deploy/images/iot2050/iot2050-image-swu-example-iot2050-debian-iot2050.wic.img`. This image holds the necessary partition layout with two root file systems. The image `iot2050-image-swu-example-iot2050-debian-iot2050.wic.img` can be flashed directly to a SD card as described in section [Booting the image from SD card](#booting-the-image-from-sd-card).
+
+NOTE: As the image contains 2 root file systems, it has a size of 7 Gigabytes.
+
+It also will create a binary for updating the system at `build/tmp/deploy/images/iot2050/iot2050-image-swu-example-iot2050-debian-iot2050.swu`
+
+### Update an image with SWUpdate
+
+The following steps are necessary to update an image created with SWUpdate support.
+1. Transfer the SWUpdate binary `iot2050-image-swu-example-iot2050-debian-iot2050.swu`
+to the target system.
+2. Update the system with SWUpdate by executing:
+```shell
+$ swupdate -i iot2050-image-swu-example-iot2050-debian-iot2050.swu
+```
+
+You can find more details and options for the command `swupdate` in the [SWUpdate documentation](https://sbabic.github.io/swupdate/swupdate.html#running-swupdate).
+
+NOTE: The used SWUpdate package does not contain a web-app example.
+
+SWUpdate will write the image to the unused root partition and
+sets the necessary U-Boot variables.
+
+3. Reboot the system into the new root file system. The switch between the root file systems
+occurs automatically and requires no user interaction.
+
+4. Confirm that the new root file system is correctly booted.
+
+After a reboot, the device boots into the new root file system. If the boot is
+successful the update process needs to be completed by calling:
+
+```shell
+$ complete_update.sh success
+```
+
+The script sets the update state in the U-Boot environment to the initial state.
+
+If the update is deemed failed, resetting the device will select the previous root file system.
+Afterwards the failed update is confirmed by calling:
+
+```shell
+$ complete_update.sh failed
+```
+
+This call reverts the U-Boot environment to the initial state.
+After which you have to manually reboot in order to be effective.
+
+### U-Boot environment
+
+The bootloader environment needs to be adapted to select the correct
+root file system during boot. This adaptation occurs automatically during the
+first boot by executing the `patch-u-boot-env.service`. This systemd-service
+writes the necessary variables (ustate, sysselect) to the U-Boot environment.
+After writing the U-Boot environment, an update with SWUpdate is possible.
+
+#### Revert to the default environment
+
+If it is necessary to revert to the default U-Boot environment the following command can be used:
+```shell
+$ fw_setenv -f /etc/u-boot-initial-env
+```

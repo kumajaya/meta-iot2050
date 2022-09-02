@@ -33,6 +33,7 @@ IOT2050_DEBIAN_DEBUG_PACKAGES = " \
     stress-ng \
     build-essential \
     python3 \
+    python-is-python3 \
     gawk \
     curl \
     wget \
@@ -108,7 +109,19 @@ IMAGE_INSTALL += " \
     iot2050-firmware-update \
     tcf-agent \
     mraa \
+    "
+
+# focal is using nodejs 10, our packages require >= 12
+IMAGE_INSTALL_append_iot2050-debian = " \
     node-red \
     node-red-gpio \
     node-red-preinstalled-nodes \
     "
+
+IOT2050_CORAL_SUPPORT ?= "1"
+
+IMAGE_INSTALL += "${@ ' \
+    python3-pycoral \
+    pycoral-examples \
+    gasket-module-${KERNEL_NAME} \
+    ' if d.getVar('IOT2050_CORAL_SUPPORT') == '1' else ''}"
